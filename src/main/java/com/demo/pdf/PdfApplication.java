@@ -1,13 +1,19 @@
 package com.demo.pdf;
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class PdfApplication {
+public class PdfApplication implements CommandLineRunner {
 
-	public static void main(String[] args) {
-		SpringApplication.run(PdfApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(PdfApplication.class, args);
+  }
+
+  @Override
+  public void run(String... args) throws Exception {
+    // Test
+  }
 
 }
