@@ -1,31 +1,278 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head>
+<!doctype html>
+<!-- <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"> -->
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
     <style>
-        p {
-            font-family: 'Poppins', sans-serif;
-            background-color: #ecf0f1;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+      @page {
+        size: A4 portrait;
+        /* margin: 0; */
+        margin-left: 0;
+        margin-right: 0;
+        margin-bottom: 30px;
 
-        h1 {
-            color: #e67e22;
-            margin-bottom: 20px;
-            font-size: 24px;
+        /* @top-right {
+          content: "Página " counter(page) " de " counter(pages);
+          padding-right: 15px;
+          font-family: "Helvetica Neue", Arial, sans-serif;
+        } */
+        @bottom-right {
+          content: "Page " counter(page) " of " counter(pages);
+          padding-bottom: 15px;
+          font-family: "Helvetica Neue", Arial, sans-serif;
         }
+      }
 
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Helvetica Neue", Arial, sans-serif;
+      }
+
+      body {
+        /* background-color: #ffff; */
+        padding: 20px;
+      }
+
+      .estado-cuenta {
+        background-color: #ffffff;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 30px;
+        border: 1px solid #ddd;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+      }
+
+      /* Encabezado */
+      .encabezado {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 2px solid #2c3e50;
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+      }
+
+      .encabezado .empresa h2 {
+        color: #2c3e50;
+      }
+
+      .encabezado .info-cuenta {
+        text-align: right;
+        color: #555;
+      }
+
+      /* Información del Cliente */
+      .cliente-info {
+        background-color: #f9f9f9;
+        padding: 15px;
+        border-radius: 6px;
+        margin-bottom: 25px;
+      }
+
+      /* Resumen de Saldos */
+      .resumen-saldos {
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+        margin-bottom: 30px;
+      }
+
+      .saldo-caja {
+        background-color: #f1f4f6;
+        flex: 1;
+        padding: 15px;
+        border-radius: 6px;
+        text-align: center;
+        border: 1px solid #e1e8ed;
+      }
+
+      .saldo-caja p {
+        font-size: 0.9em;
+        color: #666;
+        margin-bottom: 5px;
+      }
+
+      .saldo-caja .monto {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #333;
+      }
+
+      .saldo-caja .positivo {
+        color: #27ae60;
+      }
+      .saldo-caja .negativo {
+        color: #c0392b;
+      }
+      .saldo-caja.total {
+        background-color: #2c3e50;
+        color: #fff;
+      }
+      .saldo-caja.total p {
+        color: #fff;
+      }
+      .saldo-caja.total .monto {
+        color: #fff;
+      }
+
+      /* Tabla de Movimientos */
+      .movimientos h4 {
+        margin-bottom: 15px;
+        color: #2c3e50;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+
+      th {
+        background-color: #f8f9fa;
+        color: #333;
+        font-weight: bold;
+      }
+
+      td.monto-positivo {
+        color: #27ae60;
+        font-weight: bold;
+      }
+
+      td.monto-negativo {
+        color: #c0392b;
+        font-weight: bold;
+      }
+      .logo-contenedor {
+        display: flex;
+        /* justify-content: center; */
+        align-content: center;
+        gap: 5px;
+      }
+
+      .logo {
+        width: 50px;
+        height: 50px;
+      }
+
+      /* Pie de página */
+      .pie-pagina {
+        margin-top: 30px;
+        text-align: center;
+        font-size: 0.85em;
+        color: #777;
+        border-top: 1px solid #ddd;
+        padding-top: 15px;
+      }
     </style>
-</head>
+  </head>
 
-<body>
-<h1>User Info</h1>
-<p>UID: <span th:text="${user.uid}"></span></p>
-<p>FIRST NAME: <span th:text="${user.firstName}"></span></p>
-<p>LAST NAME: <span th:text="${user.lastName}"></span></p>
-</body>
+  <body>
+    <div class="estado-cuenta">
+      <header class="encabezado">
+        <section class="logo-contenedor">
+          <img class="logo" th:src="${user.logo}" alt="Logo" />
+
+          <div class="empresa">
+            <h2>Banco Spring Boot</h2>
+            <p>Tu futuro es nuestra prioridad</p>
+          </div>
+        </section>
+
+        <div class="info-cuenta">
+          <h3>Estado de Cuenta</h3>
+          <p>
+            <strong>Fecha de Emisión:</strong>
+            <span th:text="${user.issueDate}"></span>
+          </p>
+            <strong>Periodo:</strong> <span th:text="${user.period}"></span>
+          </p>
+        </div>
+      </header>
+
+      <section class="cliente-info">
+        <h4>Datos del Titular</h4>
+
+        <p><strong>Nombre:</strong><span th:text="${user.firstName}"></span></p>
+        <p>
+          <strong>Apellido:</strong><span th:text="${user.lastName}"></span>
+        </p>
+        <p><strong>Número de Cuenta:</strong> **** **** **** 1234</p>
+      </section>
+
+      <section class="resumen-saldos">
+        <div class="saldo-caja">
+          <p>Saldo Anterior</p>
+          <p class="monto">$ 1,500.00</p>
+        </div>
+        <div class="saldo-caja">
+          <p>Total Depósitos</p>
+          <p class="monto positivo">$ 3,000.00</p>
+        </div>
+        <div class="saldo-caja">
+          <p>Total Retiros</p>
+          <p class="monto negativo">$ 2,150.00</p>
+        </div>
+        <div class="saldo-caja total">
+          <p>Saldo Actual</p>
+          <p class="monto">$ 2,350.00</p>
+        </div>
+      </section>
+
+      <section class="movimientos">
+        <h4>Movimientos del Periodo</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Descripción</th>
+              <th>Tipo</th>
+              <th>Monto</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>01/06/2026</td>
+              <td>Depósito de Nómina</td>
+              <td class="tipo-positivo">Depósito</td>
+              <td class="monto-positivo">$ 2,000.00</td>
+            </tr>
+            <tr>
+              <td>05/06/2026</td>
+              <td>Pago Supermercado</td>
+              <td class="tipo-negativo">Retiro</td>
+              <td class="monto-negativo">$ 450.00</td>
+            </tr>
+            <tr>
+              <td>12/06/2026</td>
+              <td>Transferencia Recibida</td>
+              <td class="tipo-positivo">Depósito</td>
+              <td class="monto-positivo">$ 1,000.00</td>
+            </tr>
+            <tr>
+              <td>20/06/2026</td>
+              <td>Pago de Servicios</td>
+              <td class="tipo-negativo">Retiro</td>
+              <td class="monto-negativo">$ 1,700.00</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <footer class="pie-pagina">
+        <p>
+          Gracias por confiar en nosotros. Si encuentra algún error, comuníquese
+          dentro de los 30 días.
+        </p>
+      </footer>
+    </div>
+  </body>
 </html>
+<!-- localhost:8080/api/pdf/user -->
