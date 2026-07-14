@@ -1,6 +1,5 @@
 package com.demo.pdf.facade;
 
-public interface PdfCreationFacade
-{
-    byte[] createPdfFile();
+public interface PdfCreationFacade {
+  byte[] createPdfFile() throws Exception;
 }
